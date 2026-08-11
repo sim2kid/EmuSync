@@ -1,4 +1,5 @@
 ﻿using EmuSync.Domain.Results;
+using EmuSync.Domain.Objects;
 
 namespace EmuSync.Domain.Services.Interfaces;
 
@@ -48,4 +49,5 @@ public interface ILocalDataAccessor
     /// <param name="path"></param>
     /// <returns></returns>
     DirectoryScanResult ScanDirectory(string? path);
+    DirectoryScanResult ScanDirectories(IEnumerable<GamePathEntry> paths);
 }

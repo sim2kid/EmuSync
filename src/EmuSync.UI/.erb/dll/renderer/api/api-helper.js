@@ -2,28 +2,29 @@
 //set of helper methods for get, post, put
 //also makes it easier to ensure the auth token is part of every request when we come through here
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get = get;
-exports.remove = remove;
-exports.post = post;
-exports.postWithNoResponse = postWithNoResponse;
-exports.put = put;
+exports.put = exports.postWithNoResponse = exports.post = exports.remove = exports.get = void 0;
 async function get({ path, query }) {
     const response = await executeFetch(path, query, "GET");
     return response.json();
 }
+exports.get = get;
 async function remove({ path, query }) {
     return executeFetch(path, query, "DELETE");
 }
+exports.remove = remove;
 async function post({ path, body }) {
     const response = await executeFetch(path, body, "POST");
     return response.json();
 }
+exports.post = post;
 async function postWithNoResponse({ path, body }) {
     await executeFetch(path, body, "POST");
 }
+exports.postWithNoResponse = postWithNoResponse;
 async function put({ path, body }) {
     return executeFetch(path, body, "PUT");
 }
+exports.put = put;
 async function executeFetch(path, bodyOrQuery, method) {
     const options = {
         method,
@@ -47,7 +48,6 @@ async function executeFetch(path, bodyOrQuery, method) {
         options.body = JSON.stringify(bodyOrQuery);
         options.cache = "no-store";
     }
-    console.log(`FETCH REQUEST`, "|", url, "|", options);
     const response = await fetch(url, options);
     if (!response.ok) {
         console.error(`FAILED TO FETCH`, "|", url, "|", response);

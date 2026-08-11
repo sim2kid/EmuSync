@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Pre = Pre;
+exports.Pre = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 function Pre({ children }) {
@@ -16,4 +16,5 @@ function Pre({ children }) {
             borderRadius: "5px"
         }, component: "span", children: children }));
 }
+exports.Pre = Pre;
 //# sourceMappingURL=Pre.js.map

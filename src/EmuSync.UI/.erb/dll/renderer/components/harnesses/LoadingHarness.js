@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = LoadingHarness;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const ErrorAlert_1 = __importDefault(require("@/renderer/components/alerts/ErrorAlert"));
 const Refresh_1 = __importDefault(require("@mui/icons-material/Refresh"));
@@ -20,4 +19,5 @@ function LoadingHarness({ query, loadingState, showLoadingOnRefetch, errorState,
     }
     return children;
 }
+exports.default = LoadingHarness;
 //# sourceMappingURL=LoadingHarness.js.map

@@ -1,5 +1,6 @@
 ﻿using EmuSync.Domain.Extensions;
 using EmuSync.Domain.Helpers;
+using EmuSync.Domain.Objects;
 using EmuSync.Services.Managers.Abstracts;
 using EmuSync.Services.Managers.Enums;
 using EmuSync.Services.Managers.Interfaces;
@@ -76,7 +77,6 @@ public class GameManager(
         if (foundEntity == null) return null;
 
         foundEntity.Name = entity.Name;
-        foundEntity.SyncSourceIdLocations = entity.SyncSourceIdLocations;
         foundEntity.SyncSourceIdLocations = null;
 
         if (entity.SyncSourceIdLocations != null)
@@ -87,7 +87,7 @@ public class GameManager(
                 .SyncSourceIdLocations
                 .ToDictionary(
                     x => x.Key,
-                    x => TrimPath(x.Value)
+                    x => x.Value.Select(SanitisePathEntry).ToList()
                 );
         }
 
@@ -122,11 +122,11 @@ public class GameManager(
 
                 if (!keyExists)
                 {
-                    foundEntity.SyncSourceIdLocations.Add(localSyncSource.Id, TrimPath(upsert.Path));
+                    foundEntity.SyncSourceIdLocations.Add(localSyncSource.Id, [CreatePathEntry(upsert.Path)]);
                 }
                 else
                 {
-                    foundEntity.SyncSourceIdLocations[localSyncSource.Id] = TrimPath(upsert.Path);
+                    foundEntity.SyncSourceIdLocations[localSyncSource.Id] = [CreatePathEntry(upsert.Path)];
                 }
 
                 foundEntity.AutoSync = upsert.AutoSync ?? false;
@@ -141,7 +141,10 @@ public class GameManager(
             {
                 Id = IdHelper.Create(),
                 Name = upsert.GameName ?? "",
-                SyncSourceIdLocations = new Dictionary<string, string> { { localSyncSource.Id, upsert.Path } },
+                SyncSourceIdLocations = new Dictionary<string, List<GamePathEntry>>
+                {
+                    { localSyncSource.Id, [CreatePathEntry(upsert.Path)] }
+                },
                 AutoSync = upsert.AutoSync ?? false,
                 MaximumLocalGameBackups = upsert.MaximumLocalGameBackups
             };
@@ -197,6 +200,28 @@ public class GameManager(
     {
         var v = path?.Trim() ?? string.Empty;
         return v.TrimEnd('/', '\\');
+    }
+
+    private GamePathEntry CreatePathEntry(string? path) => new() { Path = TrimPath(path) };
+
+    private GamePathEntry SanitisePathEntry(GamePathEntry entry)
+    {
+        return new()
+        {
+            Path = TrimPath(entry.Path),
+            IncludeFilters = SanitiseFilters(entry.IncludeFilters),
+            ExcludeFilters = SanitiseFilters(entry.ExcludeFilters),
+            Enabled = entry.Enabled
+        };
+    }
+
+    private static List<string> SanitiseFilters(IEnumerable<string>? filters)
+    {
+        return filters?
+            .Select(x => x.Trim())
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Distinct(StringComparer.Ordinal)
+            .ToList() ?? [];
     }
 
     private async Task WriteToExternalList(

@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = CountdownTimer;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const Pre_1 = require("@/renderer/components/Pre");
 const HorizontalStack_1 = __importDefault(require("@/renderer/components/stacks/HorizontalStack"));
@@ -44,4 +43,5 @@ function CountdownTimer({ seconds, reset }) {
         : `${secs}s`;
     return (0, jsx_runtime_1.jsxs)(material_1.Typography, { children: ["Next AutoSync check will occur in approx: ", (0, jsx_runtime_1.jsx)(Pre_1.Pre, { children: formatted })] });
 }
+exports.default = CountdownTimer;
 //# sourceMappingURL=CountdownTimer.js.map

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SyncTypeChip = SyncTypeChip;
+exports.SyncTypeChip = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const enums_1 = require("@/renderer/types/enums");
 const CloudDownload_1 = __importDefault(require("@mui/icons-material/CloudDownload"));
@@ -19,4 +19,5 @@ function SyncTypeChip({ syncType, sx }) {
             return undefined;
     }
 }
+exports.SyncTypeChip = SyncTypeChip;
 //# sourceMappingURL=SyncTypeChip.js.map

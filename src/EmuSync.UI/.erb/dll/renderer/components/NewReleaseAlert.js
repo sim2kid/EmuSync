@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NewReleaseAlert;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const InfoAlert_1 = __importDefault(require("@/renderer/components/alerts/InfoAlert"));
 const ExternalLinkButton_1 = __importDefault(require("@/renderer/components/buttons/ExternalLinkButton"));
@@ -13,6 +12,7 @@ const material_1 = require("@mui/material");
 function NewReleaseAlert({ latestVersion }) {
     return (0, jsx_runtime_1.jsx)(InfoAlert_1.default, { content: (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { children: [(0, jsx_runtime_1.jsxs)(material_1.Typography, { children: ["There's a new version of EmuSync available: ", (0, jsx_runtime_1.jsx)(Pre_1.Pre, { children: latestVersion }), ". You can view the release on our ", (0, jsx_runtime_1.jsx)(ExternalLinkButton_1.default, { href: "https://github.com/emu-sync/EmuSync/releases/latest", text: "Github releases" }), " page."] }), (0, jsx_runtime_1.jsx)(ReleaseDownloadInformation, {})] }) });
 }
+exports.default = NewReleaseAlert;
 function ReleaseDownloadInformation() {
     if (window.electron.isLinux) {
         return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsxs)(material_1.Typography, { children: ["To update your version, please run the installer again and choose the ", (0, jsx_runtime_1.jsx)(Pre_1.Pre, { children: "Update EmuSync" }), " option."] }), (0, jsx_runtime_1.jsxs)(material_1.Typography, { children: ["If you no longer have the installer, you can download it ", (0, jsx_runtime_1.jsx)(ExternalLinkButton_1.default, { href: "https://github.com/emu-sync/EmuSync-LinuxInstaller/releases/latest/download/EmuSync-LinuxInstaller.desktop", text: "here" }), "."] })] });

@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = DisplayGameSyncStatus;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const ErrorAlert_1 = __importDefault(require("@/renderer/components/alerts/ErrorAlert"));
 const InfoAlert_1 = __importDefault(require("@/renderer/components/alerts/InfoAlert"));
@@ -16,6 +15,7 @@ const VerticalStack_1 = __importDefault(require("@/renderer/components/stacks/Ve
 const use_sync_source_mapper_1 = __importDefault(require("@/renderer/hooks/use-sync-source-mapper"));
 const game_utils_1 = require("@/renderer/views/game/utils/game-utils");
 const material_1 = require("@mui/material");
+const ExpandMore_1 = __importDefault(require("@mui/icons-material/ExpandMore"));
 const react_1 = require("react");
 function DisplayGameSyncStatus({ gameSyncStatus }) {
     const { mapSyncSource } = (0, use_sync_source_mapper_1.default)();
@@ -53,6 +53,7 @@ function DisplayGameSyncStatus({ gameSyncStatus }) {
         }
         return (0, jsx_runtime_1.jsx)(SuccessAlert_1.default, { action: storageChip, content: (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { children: [(0, jsx_runtime_1.jsx)(material_1.Typography, { children: "Game files are up to date on this device." }), lastSync] }) });
     }, [gameSyncStatus, lastSyncSourceName]);
-    return (0, jsx_runtime_1.jsx)(VerticalStack_1.default, { children: AlertMemo });
+    return (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { children: [AlertMemo, !!gameSyncStatus.children?.length && (0, jsx_runtime_1.jsxs)(material_1.Accordion, { children: [(0, jsx_runtime_1.jsx)(material_1.AccordionSummary, { expandIcon: (0, jsx_runtime_1.jsx)(ExpandMore_1.default, {}), children: (0, jsx_runtime_1.jsxs)(material_1.Typography, { children: ["Directory details (", gameSyncStatus.children.length, ")"] }) }), (0, jsx_runtime_1.jsx)(material_1.AccordionDetails, { children: (0, jsx_runtime_1.jsx)(VerticalStack_1.default, { children: gameSyncStatus.children.map((child, index) => (0, jsx_runtime_1.jsxs)(material_1.Box, { children: [(0, jsx_runtime_1.jsxs)(material_1.Typography, { color: child.exists ? "success.main" : "error.main", children: [child.exists ? "Available" : "Missing", ": ", (0, jsx_runtime_1.jsx)(Pre_1.Pre, { children: child.path })] }), child.errors.map((error, errorIndex) => (0, jsx_runtime_1.jsxs)(material_1.Typography, { color: "error", children: [error.stage, ": ", error.message] }, errorIndex))] }, `${child.path}-${index}`)) }) })] })] });
 }
+exports.default = DisplayGameSyncStatus;
 //# sourceMappingURL=DisplayGameSyncStatus.js.map

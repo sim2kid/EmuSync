@@ -1,6 +1,7 @@
 using EmuSync.Agent.Dto.Game;
 using EmuSync.Agent.Mapping;
 using EmuSync.Domain.Entities;
+using EmuSync.Domain.Objects;
 using EmuSync.Services.LudusaviImporter;
 using EmuSync.Services.Managers.Objects;
 
@@ -16,7 +17,7 @@ public class GameMappingsTests
             Id = "id",
             Name = "name",
             AutoSync = true,
-            SyncSourceIdLocations = new Dictionary<string, string> { { "s", "p" } },
+            SyncSourceIdLocations = new() { { "s", [new() { Path = "p" }] } },
             LastSyncedFrom = "src",
             LastSyncTimeUtc = DateTime.UtcNow,
             StorageBytes = 123,
@@ -28,7 +29,8 @@ public class GameMappingsTests
         Assert.Equal(entity.Id, dto.Id);
         Assert.Equal(entity.Name, dto.Name);
         Assert.Equal(entity.AutoSync, dto.AutoSync);
-        Assert.Equal(entity.SyncSourceIdLocations, dto.SyncSourceIdLocations);
+        Assert.Equal("p", dto.SyncSourceIdLocations!["s"]);
+        Assert.Equal("p", dto.SyncSourceIdLocationsV2!["s"][0].Path);
         Assert.Equal(entity.LastSyncedFrom, dto.LastSyncedFrom);
         Assert.Equal(entity.LastSyncTimeUtc, dto.LastSyncTimeUtc);
         Assert.Equal(entity.StorageBytes, dto.StorageBytes);
@@ -77,7 +79,7 @@ public class GameMappingsTests
             Name = "name",
             AutoSync = false,
             MaximumLocalGameBackups = 3,
-            SyncSourceIdLocations = new Dictionary<string, string> { { "s", "p" } },
+            SyncSourceIdLocations = new() { { "s", [new() { Path = "p" }] } },
             LastSyncedFrom = "src",
             LastSyncTimeUtc = DateTime.UtcNow,
             StorageBytes = 50
@@ -89,7 +91,8 @@ public class GameMappingsTests
         Assert.Equal(entity.Name, dto.Name);
         Assert.Equal(entity.AutoSync, dto.AutoSync);
         Assert.Equal(entity.MaximumLocalGameBackups, dto.MaximumLocalGameBackups);
-        Assert.Equal(entity.SyncSourceIdLocations, dto.SyncSourceIdLocations);
+        Assert.Equal("p", dto.SyncSourceIdLocations!["s"]);
+        Assert.Equal("p", dto.SyncSourceIdLocationsV2!["s"][0].Path);
         Assert.Equal(entity.LastSyncedFrom, dto.LastSyncedFrom);
         Assert.Equal(entity.LastSyncTimeUtc, dto.LastSyncTimeUtc);
         Assert.Equal(entity.StorageBytes, dto.StorageBytes);
@@ -112,7 +115,7 @@ public class GameMappingsTests
         Assert.Equal(create.Name, entity.Name);
         Assert.Equal(create.AutoSync, entity.AutoSync);
         Assert.Equal(create.MaximumLocalGameBackups, entity.MaximumLocalGameBackups);
-        Assert.Equal(create.SyncSourceIdLocations, entity.SyncSourceIdLocations);
+        Assert.Equal("p", entity.SyncSourceIdLocations!["s"][0].Path);
     }
 
     [Fact]
@@ -130,6 +133,26 @@ public class GameMappingsTests
         Assert.Equal("id", entity.Id);
         Assert.Equal(update.Name, entity.Name);
         Assert.Equal(update.AutoSync, entity.AutoSync);
+    }
+
+    [Fact]
+    public void CreateGameDto_PrefersV2Locations()
+    {
+        CreateGameDto create = new()
+        {
+            Name = "n",
+            SyncSourceIdLocations = new() { { "s", "legacy" } },
+            SyncSourceIdLocationsV2 = new()
+            {
+                { "s", [new() { Path = "first", IncludeFilters = ["*.sav"] }, new() { Path = "second" }] }
+            }
+        };
+
+        GameEntity entity = create.ToEntity();
+
+        Assert.Equal("first", entity.SyncSourceIdLocations!["s"][0].Path);
+        Assert.Equal("*.sav", entity.SyncSourceIdLocations["s"][0].IncludeFilters[0]);
+        Assert.Equal("second", entity.SyncSourceIdLocations["s"][1].Path);
     }
 
     [Fact]

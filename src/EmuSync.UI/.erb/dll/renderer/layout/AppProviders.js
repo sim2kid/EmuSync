@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = AppProviders;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const theme_1 = __importDefault(require("@/renderer/layout/theme"));
 const Clear_1 = __importDefault(require("@mui/icons-material/Clear"));
@@ -36,6 +35,7 @@ const queryClient = new react_query_1.QueryClient({
 function AppProviders({ children }) {
     return (0, jsx_runtime_1.jsx)(react_query_1.QueryClientProvider, { client: queryClient, children: (0, jsx_runtime_1.jsxs)(jotai_1.Provider, { children: [(0, jsx_runtime_1.jsx)(material_1.InitColorSchemeScript, { modeStorageKey: "theme-mode", attribute: "class" }), (0, jsx_runtime_1.jsx)(ThemeInitialiser, { children: children })] }) });
 }
+exports.default = AppProviders;
 function ThemeInitialiser({ children }) {
     return (0, jsx_runtime_1.jsxs)(styles_1.ThemeProvider, { modeStorageKey: "theme-mode", defaultMode: "system", theme: theme_1.default, children: [(0, jsx_runtime_1.jsx)(material_1.GlobalStyles, { styles: {
                     '@keyframes mui-auto-fill': { from: { display: 'block' } },

@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = useListQuery;
 const use_alerts_1 = __importDefault(require("@/renderer/hooks/use-alerts"));
 const react_query_1 = require("@tanstack/react-query");
 function useListQuery({ queryKey, relatedQueryKeys, queryFn, resetCacheFn, mutationFn, successCallback, errorCallback, successMessage, errorMessage }) {
@@ -45,4 +44,5 @@ function useListQuery({ queryKey, relatedQueryKeys, queryFn, resetCacheFn, mutat
         resetCacheMutation
     };
 }
+exports.default = useListQuery;
 //# sourceMappingURL=use-list-query.js.map

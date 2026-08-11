@@ -8,6 +8,19 @@ export interface GameSyncStatus {
     localFolderPathIsUnset: boolean;
     localFolderPathExists: boolean;
     storageBytes: number;
+    children?: ChildSyncStatus[];
+}
+
+export interface ChildSyncStatus {
+    path: string;
+    exists: boolean;
+    latestWriteTimeUtc?: Date | null;
+    errors: ChildSyncError[];
+}
+
+export interface ChildSyncError {
+    stage: string;
+    message: string;
 }
 
 export interface SyncProgress {

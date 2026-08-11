@@ -1,6 +1,7 @@
 ﻿using EmuSync.Agent.Dto.Game;
 using EmuSync.Services.LudusaviImporter;
 using EmuSync.Services.Managers.Objects;
+using EmuSync.Domain.Objects;
 
 namespace EmuSync.Agent.Mapping;
 
@@ -18,7 +19,8 @@ public static class GameMapping
             Id = entity.Id,
             Name = entity.Name,
             AutoSync = entity.AutoSync,
-            SyncSourceIdLocations = entity.SyncSourceIdLocations,
+            SyncSourceIdLocations = ToLegacyLocations(entity.SyncSourceIdLocations),
+            SyncSourceIdLocationsV2 = ToDtoLocations(entity.SyncSourceIdLocations),
             LastSyncedFrom = entity.LastSyncedFrom,
             LastSyncTimeUtc = entity.LastSyncTimeUtc,
             StorageBytes = entity.StorageBytes,
@@ -68,7 +70,8 @@ public static class GameMapping
             Name = entity.Name,
             AutoSync = entity.AutoSync,
             MaximumLocalGameBackups = entity.MaximumLocalGameBackups,
-            SyncSourceIdLocations = entity.SyncSourceIdLocations,
+            SyncSourceIdLocations = ToLegacyLocations(entity.SyncSourceIdLocations),
+            SyncSourceIdLocationsV2 = ToDtoLocations(entity.SyncSourceIdLocations),
             LastSyncedFrom = entity.LastSyncedFrom,
             LastSyncTimeUtc = entity.LastSyncTimeUtc,
             StorageBytes = entity.StorageBytes,
@@ -94,7 +97,11 @@ public static class GameMapping
             Id = id,
             Name = dto.Name,
             AutoSync = dto.AutoSync,
-            SyncSourceIdLocations = dto.SyncSourceIdLocations,
+            SyncSourceIdLocations = dto.SyncSourceIdLocationsV2 != null
+                ? ToDomainLocations(dto.SyncSourceIdLocationsV2)
+                : dto.SyncSourceIdLocations?.ToDictionary(
+                    x => x.Key,
+                    x => new List<GamePathEntry> { new() { Path = x.Value } }),
             MaximumLocalGameBackups = dto.MaximumLocalGameBackups
         };
     }
@@ -114,5 +121,39 @@ public static class GameMapping
             MaximumLocalGameBackups = dto.MaximumLocalGameBackups,
             Path = dto.Path
         };
+    }
+
+    private static Dictionary<string, string>? ToLegacyLocations(
+        Dictionary<string, List<GamePathEntry>>? locations)
+    {
+        return locations?.Where(x => x.Value.Count > 0).ToDictionary(x => x.Key, x => x.Value[0].Path);
+    }
+
+    private static Dictionary<string, List<GamePathEntryDto>>? ToDtoLocations(
+        Dictionary<string, List<GamePathEntry>>? locations)
+    {
+        return locations?.ToDictionary(
+            x => x.Key,
+            x => x.Value.Select(path => new GamePathEntryDto
+            {
+                Path = path.Path,
+                IncludeFilters = [.. path.IncludeFilters],
+                ExcludeFilters = [.. path.ExcludeFilters],
+                Enabled = path.Enabled
+            }).ToList());
+    }
+
+    private static Dictionary<string, List<GamePathEntry>> ToDomainLocations(
+        Dictionary<string, List<GamePathEntryDto>> locations)
+    {
+        return locations.ToDictionary(
+            x => x.Key,
+            x => x.Value.Select(path => new GamePathEntry
+            {
+                Path = path.Path,
+                IncludeFilters = [.. path.IncludeFilters],
+                ExcludeFilters = [.. path.ExcludeFilters],
+                Enabled = path.Enabled
+            }).ToList());
     }
 }

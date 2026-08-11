@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useChangeLog = useChangeLog;
+exports.useChangeLog = void 0;
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const react_query_1 = require("@tanstack/react-query");
 const changeLogUrl = "https://raw.githubusercontent.com/emu-sync/EmuSync/refs/heads/main/CHANGELOG.md";
@@ -43,4 +43,5 @@ function useChangeLog() {
         },
     });
 }
+exports.useChangeLog = useChangeLog;
 //# sourceMappingURL=use-change-log.js.map

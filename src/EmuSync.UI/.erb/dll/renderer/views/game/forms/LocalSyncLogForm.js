@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = LocalSyncLogForm;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const local_sync_log_api_1 = require("@/renderer/api/local-sync-log-api");
@@ -36,6 +35,7 @@ function LocalSyncLogForm({ gameId }) {
                     :
                         (0, jsx_runtime_1.jsx)(InfoAlert_1.default, { content: "No local sync logs are available for this game. This may be because the game has never been synced on this device, or because all previous logs have been removed due to log storage limits." }) })] });
 }
+exports.default = LocalSyncLogForm;
 function LoadingState() {
     return (0, jsx_runtime_1.jsx)(VerticalStack_1.default, { children: (0, jsx_runtime_1.jsx)(AlertSkeleton_1.default, {}) });
 }

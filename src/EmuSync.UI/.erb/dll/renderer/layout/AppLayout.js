@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = AppLayout;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const Header_1 = __importDefault(require("@/renderer/layout/Header"));
 const Sidebar_1 = __importDefault(require("@/renderer/layout/Sidebar"));
@@ -41,4 +40,5 @@ function AppLayout({ children }) {
                         overflow: "auto"
                     }, elevation: 1, children: children }) })] });
 }
+exports.default = AppLayout;
 //# sourceMappingURL=AppLayout.js.map

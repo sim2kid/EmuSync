@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Header;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 const AppLogo_1 = __importDefault(require("@/renderer/components/AppLogo"));
@@ -58,4 +57,5 @@ function Header({ mobileDrawerToggle, }) {
                             p: 1,
                         }, children: (0, jsx_runtime_1.jsx)(AppLogo_1.default, {}) }), (0, jsx_runtime_1.jsx)(SettingsMenu_1.default, {})] }) }) });
 }
+exports.default = Header;
 //# sourceMappingURL=index.js.map

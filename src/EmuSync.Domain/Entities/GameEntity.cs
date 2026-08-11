@@ -1,4 +1,6 @@
-﻿namespace EmuSync.Domain.Entities;
+﻿using EmuSync.Domain.Objects;
+
+namespace EmuSync.Domain.Entities;
 
 public class GameEntity
 {
@@ -14,7 +16,7 @@ public class GameEntity
     /// <summary>
     /// The sync sources associated with this game and the location
     /// </summary>
-    public Dictionary<string, string>? SyncSourceIdLocations { get; set; }
+    public Dictionary<string, List<GamePathEntry>>? SyncSourceIdLocations { get; set; }
 
     /// <summary>
     /// Id of the last sync source

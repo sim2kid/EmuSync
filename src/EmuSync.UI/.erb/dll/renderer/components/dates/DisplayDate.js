@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = DisplayDate;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const dayjs_1 = __importDefault(require("dayjs"));
 const react_1 = require("react");
@@ -28,4 +27,5 @@ function DisplayDate({ date, displayAsFromNow, format }) {
     }
     return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: dayJsDate.format(format) });
 }
+exports.default = DisplayDate;
 //# sourceMappingURL=DisplayDate.js.map

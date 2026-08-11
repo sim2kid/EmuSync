@@ -30,4 +30,7 @@ public record GameSyncStatusDto
 
     [JsonPropertyName("storageBytes")]
     public long? StorageBytes { get; set; }
+
+    [JsonPropertyName("children")]
+    public List<ChildSyncStatusDto> Children { get; set; } = [];
 }

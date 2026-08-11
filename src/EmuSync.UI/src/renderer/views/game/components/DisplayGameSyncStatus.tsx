@@ -10,7 +10,8 @@ import VerticalStack from "@/renderer/components/stacks/VerticalStack";
 import useSyncSourceMapper from "@/renderer/hooks/use-sync-source-mapper";
 import { GameSyncStatus } from "@/renderer/types";
 import { determineGameSyncStatus } from "@/renderer/views/game/utils/game-utils";
-import { Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { useMemo } from "react";
 
@@ -128,6 +129,23 @@ export default function DisplayGameSyncStatus({
 
     return <VerticalStack>
         {AlertMemo}
+        {!!gameSyncStatus.children?.length && <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>Directory details ({gameSyncStatus.children.length})</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <VerticalStack>
+                    {gameSyncStatus.children.map((child, index) => <Box key={`${child.path}-${index}`}>
+                        <Typography color={child.exists ? "success.main" : "error.main"}>
+                            {child.exists ? "Available" : "Missing"}: <Pre>{child.path}</Pre>
+                        </Typography>
+                        {child.errors.map((error, errorIndex) => <Typography key={errorIndex} color="error">
+                            {error.stage}: {error.message}
+                        </Typography>)}
+                    </Box>)}
+                </VerticalStack>
+            </AccordionDetails>
+        </Accordion>}
     </VerticalStack>
 
 }

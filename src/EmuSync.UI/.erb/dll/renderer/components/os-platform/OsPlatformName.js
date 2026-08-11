@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = OsPlatformName;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const os_platforms_1 = require("@/renderer/components/os-platform/os-platforms");
 const material_1 = require("@mui/material");
@@ -13,4 +12,5 @@ function OsPlatformName({ osPlatform }) {
     }, [osPlatform]);
     return (0, jsx_runtime_1.jsx)(material_1.Typography, { children: platformDetails?.name ?? "Unknown" });
 }
+exports.default = OsPlatformName;
 //# sourceMappingURL=OsPlatformName.js.map

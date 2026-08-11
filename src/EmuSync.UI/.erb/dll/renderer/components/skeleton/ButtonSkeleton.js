@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = ButtonSkeleton;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 function ButtonSkeleton({ width }) {
@@ -8,4 +7,5 @@ function ButtonSkeleton({ width }) {
             borderRadius: 50
         } });
 }
+exports.default = ButtonSkeleton;
 //# sourceMappingURL=ButtonSkeleton.js.map

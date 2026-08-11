@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = useAlerts;
 const notistack_1 = require("notistack");
 //custom hook to make alerts easier
 function useAlerts() {
@@ -21,4 +20,5 @@ function useAlerts() {
     };
     return functionExports;
 }
+exports.default = useAlerts;
 //# sourceMappingURL=use-alerts.js.map

@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = CustomToolbar;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const AddCircleOutline_1 = __importDefault(require("@mui/icons-material/AddCircleOutline"));
 const Cancel_1 = __importDefault(require("@mui/icons-material/Cancel"));
@@ -43,12 +42,12 @@ const StyledTextField = (0, styles_1.styled)(TextField_1.default)(({ theme, owne
     opacity: ownerState.expanded ? 1 : 0,
     transition: theme.transitions.create(['width', 'opacity']),
 }));
-function CustomToolbar({ addButtonRedirect, itemName, loading, reloadFunc, hasError }) {
+function CustomToolbar({ addButtonRedirect, itemName, loading, reloadFunc, hasError, toolbarExtension }) {
     const handleReloadClick = (0, react_1.useCallback)(async () => {
         await reloadFunc();
     }, [reloadFunc]);
     return ((0, jsx_runtime_1.jsxs)(x_data_grid_1.Toolbar, { children: [addButtonRedirect &&
-                (0, jsx_runtime_1.jsx)(system_1.Box, { sx: { mx: 0.5 }, children: (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, { to: addButtonRedirect, children: (0, jsx_runtime_1.jsxs)(material_1.Button, { color: "primary", size: "small", startIcon: (0, jsx_runtime_1.jsx)(AddCircleOutline_1.default, {}), disabled: loading, children: ["Add new ", itemName] }) }) }), (0, jsx_runtime_1.jsx)(system_1.Box, { sx: {
+                (0, jsx_runtime_1.jsx)(system_1.Box, { sx: { mx: 0.5 }, children: (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, { to: addButtonRedirect, children: (0, jsx_runtime_1.jsxs)(material_1.Button, { color: "primary", size: "small", startIcon: (0, jsx_runtime_1.jsx)(AddCircleOutline_1.default, {}), disabled: loading, children: ["Add new ", itemName] }) }) }), toolbarExtension, (0, jsx_runtime_1.jsx)(system_1.Box, { sx: {
                     flex: 1,
                     mx: 0.5,
                     display: "flex",
@@ -66,4 +65,5 @@ function CustomToolbar({ addButtonRedirect, itemName, loading, reloadFunc, hasEr
                                 ...controlProps.slotProps,
                             } })) })] })] }));
 }
+exports.default = CustomToolbar;
 //# sourceMappingURL=CustomToolbar.js.map

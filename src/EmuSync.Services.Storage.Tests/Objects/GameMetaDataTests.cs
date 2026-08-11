@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using EmuSync.Services.Storage.Objects;
+using EmuSync.Domain.Entities;
+using EmuSync.Domain.Objects;
 using Xunit;
 
 namespace EmuSync.Services.Storage.Tests.Objects;
@@ -56,5 +58,28 @@ public class GameMetaDataTests
         Assert.Equal("N", obj.Name);
         Assert.True(obj.AutoSync);
         Assert.Equal(10, obj.StorageBytes);
+        Assert.Equal("p", obj.ToEntity().SyncSourceIdLocations!["s"][0].Path);
+    }
+
+    [Fact]
+    public void NewShape_RoundTripsAndWritesLegacyProjection()
+    {
+        GameEntity game = new()
+        {
+            Id = "g1",
+            Name = "Game",
+            SyncSourceIdLocations = new()
+            {
+                { "s", [new() { Path = "one", ExcludeFilters = ["*.tmp"] }, new() { Path = "two" }] }
+            }
+        };
+
+        GameMetaData metadata = GameMetaData.FromGame(game);
+        GameEntity restored = metadata.ToEntity();
+
+        Assert.Equal(2, metadata.Version);
+        Assert.Equal("one", metadata.SyncSourceIdLocations!["s"]);
+        Assert.Equal("*.tmp", restored.SyncSourceIdLocations!["s"][0].ExcludeFilters[0]);
+        Assert.Equal("two", restored.SyncSourceIdLocations["s"][1].Path);
     }
 }

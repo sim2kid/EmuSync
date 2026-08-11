@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = AllDevicesListScreen;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const sync_source_api_1 = require("@/renderer/api/sync-source-api");
@@ -32,4 +31,5 @@ function AllDevicesListScreen() {
     }, [deleteMutation]);
     return (0, jsx_runtime_1.jsx)(Container_1.default, { children: (0, jsx_runtime_1.jsxs)(Section_1.default, { children: [(0, jsx_runtime_1.jsx)(SectionTitle_1.default, { title: routes_1.routes.allDevices.title, icon: (0, jsx_runtime_1.jsx)(Icon, {}) }), (0, jsx_runtime_1.jsx)(AgentStatusHarness_1.default, { children: (0, jsx_runtime_1.jsx)(DeviceList_1.default, { thisDeviceId: localSyncSource.id, query: query, onDelete: handleDelete }) })] }) });
 }
+exports.default = AllDevicesListScreen;
 //# sourceMappingURL=AllDevicesListScreen.js.map

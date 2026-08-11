@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = BackToListButtonSkeleton;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const site_settings_1 = require("@/renderer/site-settings");
 const sidebar_config_1 = require("@/renderer/state/sidebar-config");
@@ -26,4 +25,5 @@ function BackToListButtonSkeleton() {
                 borderRadius: 50
             } }) });
 }
+exports.default = BackToListButtonSkeleton;
 //# sourceMappingURL=BackToListButtonSkeleton.js.map

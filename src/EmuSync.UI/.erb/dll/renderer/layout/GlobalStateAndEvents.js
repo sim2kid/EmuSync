@@ -1,7 +1,6 @@
 "use client";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = GlobalStateAndEvents;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const sync_source_api_1 = require("@/renderer/api/sync-source-api");
@@ -53,4 +52,5 @@ function GlobalStateAndEvents() {
     // END AGENT STATUS
     return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
 }
+exports.default = GlobalStateAndEvents;
 //# sourceMappingURL=GlobalStateAndEvents.js.map

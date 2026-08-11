@@ -1,7 +1,6 @@
 'use client';
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NavItem;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 const react_router_dom_1 = require("react-router-dom");
@@ -41,4 +40,5 @@ function NavItem({ href, linkText, showText, icon, onClick, selected }) {
     return (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, { to: href, onClick: onClick, style: { textDecoration: "none" }, title: linkText, children: (0, jsx_runtime_1.jsxs)(material_1.ListItemButton, { sx: buttonStyles, selected: selected, children: [(0, jsx_runtime_1.jsx)(material_1.ListItemIcon, { sx: iconStyles, children: icon }), showText &&
                     (0, jsx_runtime_1.jsx)(material_1.ListItemText, { sx: { textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden", ml: "-10px" }, disableTypography: true, children: linkText })] }) });
 }
+exports.default = NavItem;
 //# sourceMappingURL=NavItem.js.map

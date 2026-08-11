@@ -46,6 +46,14 @@ public class GameSyncController(
         }
 
         GetSyncTypeResult result = _manager.GetSyncType(syncSource.Id, game);
+        List<ChildSyncStatusDto> children = result.DirectoryScanResult.ScannedDirectories
+            .Select(x => new ChildSyncStatusDto
+            {
+                Path = x.Path ?? string.Empty,
+                Exists = x.DirectoryExists,
+                LatestWriteTimeUtc = x.LatestWriteTimeUtc
+            })
+            .ToList();
 
         GameSyncStatusDto dto = new()
         {
@@ -55,9 +63,10 @@ public class GameSyncController(
             LocalLatestWriteTimeUtc = result.DirectoryScanResult.LatestWriteTimeUtc,
             RequiresUpload = result.SyncStatus == GameSyncStatus.RequiresUpload,
             RequiresDownload = result.SyncStatus == GameSyncStatus.RequiresDownload,
-            LocalFolderPathIsUnset = result.NoLocalFolderPath,
-            LocalFolderPathExists = result.DirectoryScanResult.DirectoryExists,
-            StorageBytes = game.StorageBytes
+            LocalFolderPathIsUnset = children.Count == 0 || children.All(x => !x.Exists),
+            LocalFolderPathExists = children.Count > 0 && children.All(x => x.Exists),
+            StorageBytes = game.StorageBytes,
+            Children = children
         };
 
         _gameSyncStatusCache.AddOrUpdate(game.Id, result.SyncStatus);

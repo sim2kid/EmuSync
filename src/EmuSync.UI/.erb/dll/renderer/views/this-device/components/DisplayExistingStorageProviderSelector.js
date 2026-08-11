@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = DisplayExistingStorageProvider;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 const react_1 = require("react");
@@ -46,4 +45,5 @@ function DisplayExistingStorageProvider({ provider }) {
                             minWidth: 120
                         }, children: "Force unlink" }), content: (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { children: [(0, jsx_runtime_1.jsx)(material_1.Typography, { children: "There may be an issue with the credentials stored on this device for your storage provider. You can force unlink it here." }), (0, jsx_runtime_1.jsx)(material_1.Typography, { children: "I recommend that you force unlink the provider, link to it again, then try unlinking normally again to property clear this device from the storage provider." })] }) })] });
 }
+exports.default = DisplayExistingStorageProvider;
 //# sourceMappingURL=DisplayExistingStorageProviderSelector.js.map

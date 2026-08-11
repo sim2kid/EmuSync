@@ -3,8 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allRoutes = exports.routes = void 0;
-exports.getMatchingRoute = getMatchingRoute;
+exports.getMatchingRoute = exports.allRoutes = exports.routes = void 0;
 const Computer_1 = __importDefault(require("@mui/icons-material/Computer"));
 const Home_1 = __importDefault(require("@mui/icons-material/Home"));
 const Info_1 = __importDefault(require("@mui/icons-material/Info"));
@@ -36,6 +35,12 @@ exports.routes = {
         href: "/game/edit",
         title: "Edit game",
         pathMatcher: (path) => editPath("game", path),
+        icon: VideogameAsset_1.default
+    },
+    gameQuickAdd: {
+        href: "/game/quick-add",
+        title: "Quick add/update games",
+        pathMatcher: exactPathMatch,
         icon: VideogameAsset_1.default
     },
     gameAdd: {
@@ -78,6 +83,7 @@ function getMatchingRoute(pathName) {
     }
     return null;
 }
+exports.getMatchingRoute = getMatchingRoute;
 function editPath(segment, path) {
     const regex = "(/" + segment + "/edit)[/]?[0-9]?";
     return new RegExp(regex, "i").test(path);

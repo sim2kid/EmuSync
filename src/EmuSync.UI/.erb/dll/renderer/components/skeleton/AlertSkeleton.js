@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = AlertSkeleton;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 function AlertSkeleton() {
@@ -8,4 +7,5 @@ function AlertSkeleton() {
             borderRadius: 4
         } });
 }
+exports.default = AlertSkeleton;
 //# sourceMappingURL=AlertSkeleton.js.map

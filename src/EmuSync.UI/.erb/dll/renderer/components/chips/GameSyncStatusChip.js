@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GameSyncStatusChip = GameSyncStatusChip;
+exports.GameSyncStatusChip = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const enums_1 = require("@/renderer/types/enums");
 const CloudDone_1 = __importDefault(require("@mui/icons-material/CloudDone"));
@@ -38,4 +38,5 @@ function GameSyncStatusChip({ status }) {
             return (0, jsx_runtime_1.jsx)(material_1.Chip, { icon: (0, jsx_runtime_1.jsx)(Help_1.default, {}), title: "Unknown", color: "default", size: "small", sx: circleSx });
     }
 }
+exports.GameSyncStatusChip = GameSyncStatusChip;
 //# sourceMappingURL=GameSyncStatusChip.js.map

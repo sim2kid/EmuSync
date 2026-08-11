@@ -19,6 +19,9 @@ public record GameSummaryDto
     [JsonPropertyName("syncSourceIdLocations")]
     public Dictionary<string, string>? SyncSourceIdLocations { get; set; }
 
+    [JsonPropertyName("syncSourceIdLocationsV2")]
+    public Dictionary<string, List<GamePathEntryDto>>? SyncSourceIdLocationsV2 { get; set; }
+
     [JsonPropertyName("lastSyncedFrom")]
     public string? LastSyncedFrom { get; set; }
 

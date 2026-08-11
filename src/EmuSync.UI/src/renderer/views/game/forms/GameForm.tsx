@@ -8,9 +8,11 @@ import useEditForm from "@/renderer/hooks/use-edit-form";
 import { routes } from "@/renderer/routes";
 import { allSyncSourcesAtom } from "@/renderer/state/all-sync-sources";
 import { localSyncSourceAtom } from "@/renderer/state/local-sync-source";
-import { BaseFormProps as BaseEditFormProps, CreateGame, Game, GameSuggestion, GameSummary, UpdateGame } from "@/renderer/types";
-import { defaultCreateGame, defaultUpdateGame, replacePathDelims, transformCreateGame, transformUpdateGame } from "@/renderer/views/game/utils/game-utils";
-import { Box, Button, Checkbox, Chip, Divider, FormControlLabel, Paper, Typography } from "@mui/material";
+import { BaseFormProps as BaseEditFormProps, CreateGame, Game, GamePathEntry, GameSuggestion, GameSummary, UpdateGame } from "@/renderer/types";
+import { defaultCreateGame, defaultUpdateGame, parseFilterText, replacePathDelims, transformCreateGame, transformUpdateGame } from "@/renderer/views/game/utils/game-utils";
+import { Box, Button, Checkbox, Chip, Divider, FormControlLabel, IconButton, Paper, TextField, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { UseQueryResult } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
@@ -133,9 +135,13 @@ export default function GameForm({
             setValue("name", game.name, { shouldDirty: true });
         }
 
-        setValue(`syncSourceIdLocations.${localSyncSource.id}`, filePath, { shouldDirty: true });
+        const current = getValues().syncSourceIdLocationsV2?.[localSyncSource.id];
+        setValue(`syncSourceIdLocationsV2.${localSyncSource.id}` as never, (current?.length
+            ? [{ ...current[0], path: filePath }, ...current.slice(1)]
+            : [{ path: filePath, includeFilters: [], excludeFilters: [], enabled: true }]) as never,
+        { shouldDirty: true });
 
-    }, [setValue, isEdit, localSyncSource]);
+    }, [setValue, getValues, isEdit, localSyncSource]);
 
     return <Section>
 
@@ -277,28 +283,82 @@ export default function GameForm({
 
                                 return <Controller
                                     key={src.id}
-                                    name={`syncSourceIdLocations.${src.id}` as const}
+                                    name={`syncSourceIdLocationsV2.${src.id}` as never}
                                     control={control as never}
 
                                     render={({ field }) => {
+                                        const entries = (field.value ?? []) as GamePathEntry[];
+                                        const updateEntry = (index: number, changes: Partial<GamePathEntry>) => {
+                                            field.onChange(entries.map((entry, i) => i === index ? { ...entry, ...changes } : entry));
+                                        };
 
-                                        return <HorizontalStack>
-                                            <DefaultTextField
-                                                field={field}
-                                                placeholder={isThisDevice ? "Pick or enter a location" : "Enter a location"}
-                                                label={label}
+                                        return <VerticalStack>
+                                            <Typography variant="subtitle2">{label}</Typography>
+                                            {entries.map((entry, index) => <Paper key={index} variant="outlined" sx={{ p: 2 }}>
+                                                <VerticalStack>
+                                                    <HorizontalStack>
+                                                        <TextField
+                                                            fullWidth
+                                                            required
+                                                            label="Directory"
+                                                            placeholder={isThisDevice ? "Pick or enter a location" : "Enter a location"}
+                                                            value={entry.path}
+                                                            onChange={(event) => updateEntry(index, { path: event.target.value })}
+                                                            disabled={disabled || isSubmitting}
+                                                        />
+                                                        {isThisDevice && <PickDirectoryButton
+                                                            disabled={isSubmitting}
+                                                            defaultPath={entry.path}
+                                                            onPickDirectory={(directory) => updateEntry(index, { path: directory })}
+                                                        />}
+                                                        <IconButton
+                                                            title="Remove directory"
+                                                            disabled={disabled || isSubmitting}
+                                                            onClick={() => field.onChange(entries.filter((_, i) => i !== index))}
+                                                        >
+                                                            <DeleteOutlineIcon />
+                                                        </IconButton>
+                                                    </HorizontalStack>
+                                                    <FormControlLabel
+                                                        control={<Checkbox
+                                                            checked={entry.enabled}
+                                                            onChange={(event) => updateEntry(index, { enabled: event.target.checked })}
+                                                        />}
+                                                        label="Enabled"
+                                                    />
+                                                    <TextField
+                                                        multiline
+                                                        minRows={2}
+                                                        label="Include filters"
+                                                        helperText="One glob per line. Empty includes all files."
+                                                        value={entry.includeFilters.join("\n")}
+                                                        onChange={(event) => updateEntry(index, { includeFilters: parseFilterText(event.target.value) })}
+                                                        disabled={disabled || isSubmitting}
+                                                    />
+                                                    <TextField
+                                                        multiline
+                                                        minRows={2}
+                                                        label="Exclude filters"
+                                                        helperText="One glob per line. Excludes always win."
+                                                        value={entry.excludeFilters.join("\n")}
+                                                        onChange={(event) => updateEntry(index, { excludeFilters: parseFilterText(event.target.value) })}
+                                                        disabled={disabled || isSubmitting}
+                                                    />
+                                                </VerticalStack>
+                                            </Paper>)}
+                                            <Button
+                                                startIcon={<AddIcon />}
                                                 disabled={disabled || isSubmitting}
-                                            />
-
-                                            {
-                                                isThisDevice &&
-                                                <PickDirectoryButton
-                                                    disabled={isSubmitting}
-                                                    defaultPath={field.value}
-                                                    onPickDirectory={(directory) => field.onChange(directory)}
-                                                />
-                                            }
-                                        </HorizontalStack>
+                                                onClick={() => field.onChange([...entries, {
+                                                    path: "",
+                                                    includeFilters: [],
+                                                    excludeFilters: [],
+                                                    enabled: true
+                                                }])}
+                                            >
+                                                Add directory
+                                            </Button>
+                                        </VerticalStack>
                                     }}
                                 />
                             })

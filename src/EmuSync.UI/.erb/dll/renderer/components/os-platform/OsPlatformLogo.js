@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = OsPlatformLogo;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const os_platforms_1 = require("@/renderer/components/os-platform/os-platforms");
 const system_1 = require("@mui/system");
@@ -23,4 +22,5 @@ function OsPlatformLogo({ osPlatform }) {
                         width: "auto",
                     } }) }) });
 }
+exports.default = OsPlatformLogo;
 //# sourceMappingURL=OsPlatformLogo.js.map

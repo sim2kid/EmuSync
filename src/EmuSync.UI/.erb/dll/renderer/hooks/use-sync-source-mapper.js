@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = useSyncSourceMapper;
 const all_sync_sources_1 = require("@/renderer/state/all-sync-sources");
 const local_sync_source_1 = require("@/renderer/state/local-sync-source");
 const jotai_1 = require("jotai");
@@ -23,4 +22,5 @@ function useSyncSourceMapper() {
         mapSyncSource
     };
 }
+exports.default = useSyncSourceMapper;
 //# sourceMappingURL=use-sync-source-mapper.js.map

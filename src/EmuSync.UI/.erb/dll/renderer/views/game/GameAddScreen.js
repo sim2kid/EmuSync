@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = GameAddScreen;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const game_api_1 = require("@/renderer/api/game-api");
@@ -25,4 +24,5 @@ function GameAddScreen() {
     });
     return (0, jsx_runtime_1.jsxs)(Container_1.default, { children: [(0, jsx_runtime_1.jsx)(BackToListButton_1.default, { href: routes_1.routes.game.href }), (0, jsx_runtime_1.jsx)(GameForm_1.default, { isEdit: false, query: query, saveMutation: updateMutation })] });
 }
+exports.default = GameAddScreen;
 //# sourceMappingURL=GameAddScreen.js.map

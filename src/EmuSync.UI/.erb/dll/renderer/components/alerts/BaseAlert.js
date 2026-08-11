@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = BaseAlert;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 const react_1 = require("react");
@@ -13,4 +12,5 @@ function BaseAlert({ severity, content, ...alertProps }) {
     }, [content]);
     return (0, jsx_runtime_1.jsx)(material_1.Alert, { severity: severity, ...alertProps, children: alertContent });
 }
+exports.default = BaseAlert;
 //# sourceMappingURL=BaseAlert.js.map

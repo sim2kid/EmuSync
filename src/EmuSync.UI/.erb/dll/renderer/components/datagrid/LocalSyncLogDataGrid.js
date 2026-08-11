@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = LocalSyncLogDataGrid;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const SyncTypeChip_1 = require("@/renderer/components/chips/SyncTypeChip");
 const CustomToolbar_1 = __importDefault(require("@/renderer/components/datagrid/CustomToolbar"));
@@ -63,4 +62,5 @@ function LocalSyncLogDataGrid({ loading, hasError, reloadFunc, logs, games, show
             row: disableSelection ? undefined : LinkRow
         } });
 }
+exports.default = LocalSyncLogDataGrid;
 //# sourceMappingURL=LocalSyncLogDataGrid.js.map

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useReleaseVersionChecker = useReleaseVersionChecker;
+exports.useReleaseVersionChecker = void 0;
 const react_1 = require("react");
 const react_query_1 = require("@tanstack/react-query");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
@@ -26,4 +26,5 @@ function useReleaseVersionChecker() {
         isNewVersion,
     };
 }
+exports.useReleaseVersionChecker = useReleaseVersionChecker;
 //# sourceMappingURL=use-release-version-checker.js.map

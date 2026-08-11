@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cacheKeys = void 0;
-exports.buildCacheKey = buildCacheKey;
+exports.buildCacheKey = exports.cacheKeys = void 0;
 exports.cacheKeys = {
     localSyncSource: "localSyncSource",
     allSyncSources: "allSyncSources",
@@ -18,6 +17,7 @@ exports.cacheKeys = {
     gameLocalSyncLogs: (id) => {
         return buildCacheKey("gameLocalSyncLogs", id);
     },
+    gameSyncProgres: "gameSyncProgres",
     gameList: "gameList",
     gameSuggestionList: "gameSuggestionList",
     healthCheck: "healthCheck",
@@ -31,4 +31,5 @@ exports.cacheKeys = {
 function buildCacheKey(key, additionalPart) {
     return `${key}-${additionalPart}`;
 }
+exports.buildCacheKey = buildCacheKey;
 //# sourceMappingURL=cache-keys.js.map

@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = AppLogo;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 const emusync_logo_dark_png_1 = __importDefault(require("@assets/images/emusync-logo-dark.png"));
@@ -17,4 +16,5 @@ function AppLogo() {
             padding: "0.65rem"
         } });
 }
+exports.default = AppLogo;
 //# sourceMappingURL=AppLogo.js.map

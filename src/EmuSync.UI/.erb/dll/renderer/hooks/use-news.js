@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useNews = useNews;
+exports.useNews = void 0;
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const react_query_1 = require("@tanstack/react-query");
 const newsUrl = "https://raw.githubusercontent.com/emu-sync/EmuSync/refs/heads/main/NEWS.md";
@@ -13,4 +13,5 @@ function useNews() {
         },
     });
 }
+exports.useNews = useNews;
 //# sourceMappingURL=use-news.js.map

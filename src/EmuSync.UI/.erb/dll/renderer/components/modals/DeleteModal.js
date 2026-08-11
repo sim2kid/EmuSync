@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = DeleteModal;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const Pre_1 = require("@/renderer/components/Pre");
 const VerticalStack_1 = __importDefault(require("@/renderer/components/stacks/VerticalStack"));
@@ -69,4 +68,5 @@ function DeleteModal({ deleteDetails, isOpen, maxWidth, slotComponent, isLoading
                                 (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { children: [(0, jsx_runtime_1.jsx)(VerticalStack_1.default, { justifyContent: "start", children: (0, jsx_runtime_1.jsxs)(material_1.Typography, { children: ["You are about to ", (0, jsx_runtime_1.jsx)("strong", { children: "permanently" }), " delete the following item: ", (0, jsx_runtime_1.jsx)(Pre_1.Pre, { children: deleteDetails?.nameIdentifier }), "."] }) }), slotComponent, (0, jsx_runtime_1.jsxs)(material_1.Typography, { children: ["Type the word ", (0, jsx_runtime_1.jsx)(Pre_1.Pre, { children: "confirm" }), " to proceed with the delete."] }), (0, jsx_runtime_1.jsx)(material_1.TextField, { inputRef: inputRef, onChange: (e) => setConfirmText(e.target.value), value: confirmText, disabled: isSubmitting, variant: "outlined" })] }) }), (0, jsx_runtime_1.jsx)(material_1.Divider, { variant: "middle" }), (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { sx: { p: 3 }, children: [!preventDelete &&
                         (0, jsx_runtime_1.jsx)(material_1.Button, { disabled: !deleteIsAllowed || isSubmitting || loading, loading: isSubmitting, type: "submit", color: "error", variant: "contained", children: "Delete" }), (0, jsx_runtime_1.jsx)(material_1.Button, { onClick: handleClose, disabled: isSubmitting || loading, color: "secondary", variant: "contained", children: "Cancel" })] })] });
 }
+exports.default = DeleteModal;
 //# sourceMappingURL=DeleteModal.js.map

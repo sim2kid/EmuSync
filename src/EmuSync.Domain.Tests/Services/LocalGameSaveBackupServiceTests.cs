@@ -44,7 +44,7 @@ public class LocalGameSaveBackupServiceTests
         var sut = CreateSut(local);
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await sut.RestoreBackupAsync("g1", "b1", Path.GetTempPath()));
+            await sut.RestoreBackupAsync("g1", "b1", []));
     }
 
     [Fact]

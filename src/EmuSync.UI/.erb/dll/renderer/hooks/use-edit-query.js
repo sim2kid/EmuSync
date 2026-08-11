@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = useEditQuery;
 const use_alerts_1 = __importDefault(require("@/renderer/hooks/use-alerts"));
 const react_query_1 = require("@tanstack/react-query");
 function useEditQuery({ queryKey, relatedQueryKeys, queryFn, mutationFn, successCallback, errorCallback, successMessage, errorMessage, disableAlerts }) {
@@ -48,4 +47,5 @@ function useEditQuery({ queryKey, relatedQueryKeys, queryFn, mutationFn, success
         updateMutation
     };
 }
+exports.default = useEditQuery;
 //# sourceMappingURL=use-edit-query.js.map

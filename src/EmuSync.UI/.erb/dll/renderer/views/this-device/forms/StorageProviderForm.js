@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = StorageProviderForm;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const sync_source_api_1 = require("@/renderer/api/sync-source-api");
@@ -36,6 +35,7 @@ function StorageProviderForm() {
                     :
                         (0, jsx_runtime_1.jsx)(StorageProviderSelector_1.default, { onConnected: handleConnectedProvider }) })] });
 }
+exports.default = StorageProviderForm;
 function LoadingState() {
     return (0, jsx_runtime_1.jsxs)(HorizontalStack_1.default, { children: [(0, jsx_runtime_1.jsx)(material_1.Typography, { children: "Loading provider details..." }), (0, jsx_runtime_1.jsx)(material_1.CircularProgress, { size: 16 })] });
 }

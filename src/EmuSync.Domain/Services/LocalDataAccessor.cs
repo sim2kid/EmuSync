@@ -1,5 +1,6 @@
 ﻿using EmuSync.Domain.Enums;
 using EmuSync.Domain.Helpers;
+using EmuSync.Domain.Objects;
 using EmuSync.Domain.Results;
 using EmuSync.Domain.Services.Interfaces;
 using System.Text.Json;
@@ -57,7 +58,32 @@ public class LocalDataAccessor : ILocalDataAccessor
 
     public DirectoryScanResult ScanDirectory(string? path)
     {
-        DirectoryScanResult result = new();
+        return ScanDirectory(path, null);
+    }
+
+    public DirectoryScanResult ScanDirectories(IEnumerable<GamePathEntry> paths)
+    {
+        List<DirectoryScanResult> scans = paths
+            .Where(x => x.Enabled)
+            .Select(x => ScanDirectory(x.Path, new PathFilter(x.IncludeFilters, x.ExcludeFilters)))
+            .ToList();
+
+        return new DirectoryScanResult
+        {
+            DirectoryIsSet = scans.Count > 0,
+            DirectoryExists = scans.Count > 0 && scans.All(x => x.DirectoryExists),
+            FileCount = scans.Sum(x => x.FileCount),
+            DirectoryCount = scans.Sum(x => x.DirectoryCount),
+            StorageBytes = scans.Sum(x => x.StorageBytes),
+            LatestFileWriteTimeUtc = Max(scans.Select(x => x.LatestFileWriteTimeUtc)),
+            LatestDirectoryWriteTimeUtc = Max(scans.Select(x => x.LatestDirectoryWriteTimeUtc)),
+            ScannedDirectories = scans
+        };
+    }
+
+    private DirectoryScanResult ScanDirectory(string? path, PathFilter? filter)
+    {
+        DirectoryScanResult result = new() { Path = path };
 
         if (string.IsNullOrEmpty(path))
         {
@@ -73,12 +99,12 @@ public class LocalDataAccessor : ILocalDataAccessor
         DirectoryInfo directoryInfo = new DirectoryInfo(path);
         result.LatestDirectoryWriteTimeUtc = directoryInfo.LastWriteTimeUtc;
 
-        SearchDirectory(result, path);
+        SearchDirectory(result, path, path, filter);
 
         return result;
     }
 
-    private void SearchDirectory(DirectoryScanResult scanResult, string path)
+    private void SearchDirectory(DirectoryScanResult scanResult, string rootPath, string path, PathFilter? filter)
     {
         var files = Directory.EnumerateFiles(path);
 
@@ -86,13 +112,15 @@ public class LocalDataAccessor : ILocalDataAccessor
         {
             foreach (string file in files)
             {
+                if (filter != null && !filter.Passes(Path.GetRelativePath(rootPath, file))) continue;
+
                 scanResult.FileCount++;
 
                 FileInfo fileInfo = new FileInfo(file);
 
                 scanResult.StorageBytes += fileInfo.Length;
 
-                DateTime latest = scanResult.LatestFileWriteTimeUtc ?? DateTime.MinValue;
+                DateTime latest = scanResult.LatestDirectoryWriteTimeUtc ?? DateTime.MinValue;
                 if (fileInfo.LastWriteTimeUtc > latest)
                 {
                     scanResult.LatestFileWriteTimeUtc = fileInfo.LastWriteTimeUtc;
@@ -116,9 +144,15 @@ public class LocalDataAccessor : ILocalDataAccessor
                     scanResult.LatestDirectoryWriteTimeUtc = directoryInfo.LastWriteTimeUtc;
                 }
 
-                SearchDirectory(scanResult, directory);
+                SearchDirectory(scanResult, rootPath, directory, filter);
             }
         }
+    }
+
+    private static DateTime? Max(IEnumerable<DateTime?> values)
+    {
+        DateTime[] setValues = values.Where(x => x.HasValue).Select(x => x!.Value).ToArray();
+        return setValues.Length == 0 ? null : setValues.Max();
     }
 
     /// <summary>

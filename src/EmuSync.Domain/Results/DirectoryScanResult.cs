@@ -9,6 +9,8 @@ public record DirectoryScanResult
     public long StorageBytes { get; set; }
     public DateTime? LatestFileWriteTimeUtc { get; set; }
     public DateTime? LatestDirectoryWriteTimeUtc { get; set; }
+    public List<DirectoryScanResult> ScannedDirectories { get; set; } = [];
+    public string? Path { get; set; }
     public DateTime? LatestWriteTimeUtc
     {
         get

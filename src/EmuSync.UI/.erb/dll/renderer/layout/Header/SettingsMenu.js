@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = SettingsMenu;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const InfoAlert_1 = __importDefault(require("@/renderer/components/alerts/InfoAlert"));
 const use_release_version_checker_1 = require("@/renderer/hooks/use-release-version-checker");
@@ -52,4 +51,5 @@ function SettingsMenu() {
                                     m: 1
                                 }, content: (0, jsx_runtime_1.jsxs)(material_1.Typography, { children: ["There is ", (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, { onClick: handleCloseUserMenu, to: routes_1.routes.about.href, children: "new version" }), " of EmuSync available!"] }) })] }) })] });
 }
+exports.default = SettingsMenu;
 //# sourceMappingURL=SettingsMenu.js.map

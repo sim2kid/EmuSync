@@ -1,11 +1,19 @@
 import { GameSyncStatus } from "@/renderer/types/enums";
 
+export interface GamePathEntry {
+    path: string;
+    includeFilters: string[];
+    excludeFilters: string[];
+    enabled: boolean;
+}
+
 export interface GameSummary {
     id: string;
     name: string;
     autoSync: boolean;
     maximumLocalGameBackups: number | null;
     syncSourceIdLocations?: Record<string, string> | null;
+    syncSourceIdLocationsV2?: Record<string, GamePathEntry[]> | null;
     lastSyncedFrom?: string | null;
     lastSyncTimeUtc?: Date | null;
     syncStatusId: GameSyncStatus;
@@ -23,6 +31,7 @@ export interface Game {
     autoSync: boolean;
     maximumLocalGameBackups: number | null;
     syncSourceIdLocations?: Record<string, string> | null;
+    syncSourceIdLocationsV2?: Record<string, GamePathEntry[]> | null;
     lastSyncedFrom?: string | null;
     lastSyncTimeUtc?: Date | null;
     storageBytes: number;
@@ -32,6 +41,7 @@ export interface CreateGame {
     name: string;
     autoSync: boolean;
     syncSourceIdLocations?: Record<string, string> | null;
+    syncSourceIdLocationsV2?: Record<string, GamePathEntry[]> | null;
     maximumLocalGameBackups: number | null;
 }
 
@@ -40,6 +50,7 @@ export interface UpdateGame {
     name: string;
     autoSync: boolean;
     syncSourceIdLocations?: Record<string, string> | null;
+    syncSourceIdLocationsV2?: Record<string, GamePathEntry[]> | null;
     maximumLocalGameBackups: number | null;
 }
 

@@ -31,13 +31,11 @@ public class GameSyncManager(
     {
         GetSyncTypeResult result = new();
 
-        string? folderPath = null;
-        game.SyncSourceIdLocations?.TryGetValue(syncSourceId, out folderPath);
-
-        DirectoryScanResult scanResult = LocalDataAccessor.ScanDirectory(folderPath);
+        List<GamePathEntry> children = GetEnabledChildren(syncSourceId, game);
+        DirectoryScanResult scanResult = LocalDataAccessor.ScanDirectories(children);
 
         result.SyncStatus = DetermineSyncType(game, scanResult);
-        result.FolderPath = folderPath!;
+        result.Children = children;
         result.DirectoryScanResult = scanResult;
 
         return result;
@@ -57,7 +55,7 @@ public class GameSyncManager(
             case GameSyncStatus.RequiresDownload:
 
                 await DownloadGameFilesAsync(
-                    syncTypeResult.FolderPath,
+                    syncTypeResult.Children,
                     game,
                     isAutoSync,
                     cancellationToken
@@ -69,7 +67,7 @@ public class GameSyncManager(
 
                 await UploadGameFilesAsync(
                     syncSourceId,
-                    syncTypeResult.FolderPath,
+                    syncTypeResult.Children,
                     game,
                     isAutoSync,
                     syncTypeResult.DirectoryScanResult,
@@ -90,16 +88,15 @@ public class GameSyncManager(
         CancellationToken cancellationToken = default
     )
     {
-        string? folderPath = null;
-        game.SyncSourceIdLocations?.TryGetValue(syncSourceId, out folderPath);
+        List<GamePathEntry> children = GetEnabledChildren(syncSourceId, game);
 
-        if (string.IsNullOrEmpty(folderPath))
+        if (children.Count == 0)
         {
             throw new ArgumentNullException("No sync location has been set");
         }
 
         await DownloadGameFilesAsync(
-            folderPath,
+            children,
             game,
             isAutoSync,
             cancellationToken
@@ -113,19 +110,18 @@ public class GameSyncManager(
         CancellationToken cancellationToken = default
     )
     {
-        string? folderPath = null;
-        game.SyncSourceIdLocations?.TryGetValue(syncSourceId, out folderPath);
+        List<GamePathEntry> children = GetEnabledChildren(syncSourceId, game);
 
-        if (string.IsNullOrEmpty(folderPath))
+        if (children.Count == 0)
         {
             throw new ArgumentNullException("No sync location has been set");
         }
 
-        DirectoryScanResult scanResult = LocalDataAccessor.ScanDirectory(folderPath);
+        DirectoryScanResult scanResult = LocalDataAccessor.ScanDirectories(children);
 
         await UploadGameFilesAsync(
             syncSourceId,
-            folderPath,
+            children,
             game,
             isAutoSync,
             scanResult,
@@ -140,20 +136,19 @@ public class GameSyncManager(
         CancellationToken cancellationToken = default
     )
     {
-        string? folderPath = null;
-        game.SyncSourceIdLocations?.TryGetValue(syncSourceId, out folderPath);
+        List<GamePathEntry> children = GetEnabledChildren(syncSourceId, game);
 
-        if (string.IsNullOrEmpty(folderPath))
+        if (children.Count == 0)
         {
             throw new ArgumentNullException("No sync location has been set");
         }
 
-        await _localGameSaveBackupService.RestoreBackupAsync(game.Id, backupId, folderPath, cancellationToken);
-        DirectoryScanResult scanResult = LocalDataAccessor.ScanDirectory(folderPath);
+        await _localGameSaveBackupService.RestoreBackupAsync(game.Id, backupId, children, cancellationToken);
+        DirectoryScanResult scanResult = LocalDataAccessor.ScanDirectories(children);
 
         await UploadGameFilesAsync(
             syncSourceId,
-            folderPath,
+            children,
             game,
             isAutoSync: false,
             scanResult,
@@ -164,6 +159,12 @@ public class GameSyncManager(
     private GameSyncStatus DetermineSyncType(GameEntity game, DirectoryScanResult scanResult)
     {
         using var logScope = Logger.BeginScope("Determine sync type for game {gameName} / {gameId}", game.Name, game.Id);
+
+        if (!scanResult.DirectoryIsSet)
+        {
+            Logger.LogDebug("No local directory is set - unknown sync status");
+            return GameSyncStatus.UnsetDirectory;
+        }
 
         //game has never been synced before = must upload local data
         if (game.LastSyncTimeUtc == null)
@@ -179,13 +180,6 @@ public class GameSyncManager(
 
             //nothing local to upload
             return GameSyncStatus.Unknown;
-        }
-
-        if (!scanResult.DirectoryIsSet)
-        {
-            Logger.LogDebug("No local directory is set - unknown sync status");
-
-            return GameSyncStatus.UnsetDirectory;
         }
 
         //cloud record exists but local directory missing = need to download
@@ -218,7 +212,7 @@ public class GameSyncManager(
     }
 
     private async Task DownloadGameFilesAsync(
-        string path,
+        IReadOnlyList<GamePathEntry> children,
         GameEntity game,
         bool isAutoSync,
         CancellationToken cancellationToken = default
@@ -256,7 +250,7 @@ public class GameSyncManager(
 
             await _localGameSaveBackupService.CreateBackupAsync(
                 game,
-                path,
+                children,
                 (progress) => _syncProgressTracker.UpdateStageCompletionPercent(game.Id, progress, 70, 85),
                 cancellationToken
             );
@@ -265,9 +259,9 @@ public class GameSyncManager(
 
             using var fileStream = new FileStream(tempZipPath, FileMode.Open, FileAccess.Read);
 
-            ZipHelper.ExtractToDirectory(
+            ZipHelper.ExtractCombinedZip(
                 fileStream,
-                path,
+                children,
                 game.LatestWriteTimeUtc,
                 (progress) => _syncProgressTracker.UpdateStageCompletionPercent(game.Id, progress, 85, 100)
             );
@@ -295,7 +289,7 @@ public class GameSyncManager(
 
     private async Task UploadGameFilesAsync(
         string syncSourceId,
-        string path,
+        IReadOnlyList<GamePathEntry> children,
         GameEntity game,
         bool isAutoSync,
         DirectoryScanResult scanResult,
@@ -318,8 +312,8 @@ public class GameSyncManager(
             _syncProgressTracker.UpdateStage(game.Id, "Compressing game files");
 
             //create a physical zip
-            ZipHelper.CreateZipFromFolder(
-                path,
+            ZipHelper.CreateCombinedZip(
+                children,
                 tempZipPath,
                 (progress) => _syncProgressTracker.UpdateStageCompletionPercent(game.Id, progress, 0, 30)
             );
@@ -380,6 +374,12 @@ public class GameSyncManager(
         return LocalDataAccessor.GetLocalFilePath(
             Path.Combine(DomainConstants.LocalDataGameTempZipsFolder, tempZipName)
         );
+    }
+
+    private static List<GamePathEntry> GetEnabledChildren(string syncSourceId, GameEntity game)
+    {
+        game.SyncSourceIdLocations?.TryGetValue(syncSourceId, out List<GamePathEntry>? children);
+        return children?.Where(x => x.Enabled).ToList() ?? [];
     }
 
     private void DeleteFileIfExsts(string filePath)

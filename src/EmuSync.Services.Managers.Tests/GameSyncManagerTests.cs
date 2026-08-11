@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using EmuSync.Domain.Entities;
 using EmuSync.Domain.Enums;
 using EmuSync.Domain.Results;
+using EmuSync.Domain.Objects;
 using EmuSync.Domain.Services.Interfaces;
 using EmuSync.Services.Managers;
 using EmuSync.Services.Managers.Interfaces;
@@ -35,12 +36,12 @@ public class GameSyncManagerTests
     [Fact]
     public void GetSyncType_NoLastSync_AndDirExists_Returns_RequiresUpload()
     {
-        var game = new GameEntity { Id = "g1" };
+        var game = CreateGame();
         var scan = new DirectoryScanResult { DirectoryExists = true, DirectoryIsSet = true };
 
         _local.Setup(x =>
-            x.ScanDirectory(
-                It.IsAny<string?>()
+            x.ScanDirectories(
+                It.IsAny<IEnumerable<GamePathEntry>>()
             )
         ).Returns(scan);
 
@@ -53,12 +54,13 @@ public class GameSyncManagerTests
     [Fact]
     public void GetSyncType_NoDirectorySet_Returns_UnsetDirectory()
     {
-        var game = new GameEntity { Id = "g1", LastSyncTimeUtc = DateTime.UtcNow };
+        var game = CreateGame();
+        game.LastSyncTimeUtc = DateTime.UtcNow;
         var scan = new DirectoryScanResult { DirectoryIsSet = false };
 
         _local.Setup(x =>
-            x.ScanDirectory(
-                It.IsAny<string?>()
+            x.ScanDirectories(
+                It.IsAny<IEnumerable<GamePathEntry>>()
             )
         ).Returns(scan);
 
@@ -71,7 +73,8 @@ public class GameSyncManagerTests
     [Fact]
     public void GetSyncType_LocalMissing_Returns_RequiresDownload()
     {
-        var game = new GameEntity { Id = "g1", LastSyncTimeUtc = DateTime.UtcNow };
+        var game = CreateGame();
+        game.LastSyncTimeUtc = DateTime.UtcNow;
         var scan = new DirectoryScanResult
         {
             DirectoryIsSet = true,
@@ -80,8 +83,8 @@ public class GameSyncManagerTests
         };
 
         _local.Setup(x =>
-            x.ScanDirectory(
-                It.IsAny<string?>()
+            x.ScanDirectories(
+                It.IsAny<IEnumerable<GamePathEntry>>()
             )
         ).Returns(scan);
 
@@ -97,6 +100,7 @@ public class GameSyncManagerTests
         var game = new GameEntity
         {
             Id = "g1",
+            SyncSourceIdLocations = new() { { "s1", [new() { Path = "p" }] } },
             LastSyncTimeUtc = DateTime.UtcNow.AddHours(-2),
             LatestWriteTimeUtc = DateTime.UtcNow.AddHours(-2)
         };
@@ -109,8 +113,8 @@ public class GameSyncManagerTests
         };
 
         _local.Setup(x =>
-            x.ScanDirectory(
-                It.IsAny<string?>()
+            x.ScanDirectories(
+                It.IsAny<IEnumerable<GamePathEntry>>()
             )
         ).Returns(scan);
 
@@ -141,4 +145,10 @@ public class GameSyncManagerTests
             await sut.ForceUploadGameAsync("s1", game, true)
         );
     }
+
+    private static GameEntity CreateGame() => new()
+    {
+        Id = "g1",
+        SyncSourceIdLocations = new() { { "s1", [new() { Path = "p" }] } }
+    };
 }

@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = GameListScreen;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const game_api_1 = require("@/renderer/api/game-api");
@@ -20,6 +19,8 @@ const StorageSizeChip_1 = __importDefault(require("@/renderer/components/chips/S
 const DisplayDate_1 = __importDefault(require("@/renderer/components/dates/DisplayDate"));
 const all_sync_sources_1 = require("@/renderer/state/all-sync-sources");
 const enums_1 = require("@/renderer/types/enums");
+const ControlPointDuplicate_1 = __importDefault(require("@mui/icons-material/ControlPointDuplicate"));
+const react_router_dom_1 = require("react-router-dom");
 function GameListScreen() {
     const [allSyncSources] = (0, jotai_1.useAtom)(all_sync_sources_1.allSyncSourcesAtom);
     const columns = (0, react_1.useMemo)(() => {
@@ -94,6 +95,15 @@ function GameListScreen() {
         };
         return details;
     }, []);
-    return (0, jsx_runtime_1.jsx)(AgentStatusHarness_1.default, { children: (0, jsx_runtime_1.jsx)(ListViewDataGrid_1.default, { columns: columns, rows: query.data ?? [], loading: query.isFetching || resetCacheMutation.isPending, editHref: routes_1.routes.gameEdit.href, addButtonItemName: "game", addButtonRedirect: routes_1.routes.gameAdd.href, hasError: query.isError, reloadFunc: async () => resetCacheMutation.mutateAsync(undefined), deleteFunc: handleDelete, getDeleteItemDetails: getDeleteItemDeails }) });
+    const toolbarExtension = (0, react_1.useMemo)(() => {
+        return (0, jsx_runtime_1.jsx)(material_1.Box, { sx: {
+                borderLeft: "1px solid transparent",
+                borderColor: "divider",
+                ml: 1,
+                pl: 2,
+            }, children: (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, { to: routes_1.routes.gameQuickAdd.href, children: (0, jsx_runtime_1.jsx)(material_1.Button, { color: "primary", size: "small", startIcon: (0, jsx_runtime_1.jsx)(ControlPointDuplicate_1.default, {}), disabled: query.isFetching || resetCacheMutation.isPending, children: "Quick add/update games" }) }) });
+    }, [query.isFetching || resetCacheMutation.isPending]);
+    return (0, jsx_runtime_1.jsx)(AgentStatusHarness_1.default, { children: (0, jsx_runtime_1.jsx)(ListViewDataGrid_1.default, { columns: columns, rows: query.data ?? [], loading: query.isFetching || resetCacheMutation.isPending, editHref: routes_1.routes.gameEdit.href, addButtonItemName: "game", addButtonRedirect: routes_1.routes.gameAdd.href, hasError: query.isError, reloadFunc: async () => resetCacheMutation.mutateAsync(undefined), deleteFunc: handleDelete, getDeleteItemDetails: getDeleteItemDeails, toolbarExtension: toolbarExtension }) });
 }
+exports.default = GameListScreen;
 //# sourceMappingURL=GameListScreen.js.map

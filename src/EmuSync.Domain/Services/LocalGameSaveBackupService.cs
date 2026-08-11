@@ -1,5 +1,6 @@
 ﻿using EmuSync.Domain.Entities;
 using EmuSync.Domain.Helpers;
+using EmuSync.Domain.Objects;
 using EmuSync.Domain.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -20,24 +21,24 @@ public class LocalGameSaveBackupService(
         return manifests ?? [];
     }
 
-    public async Task CreateBackupAsync(GameEntity game, string path, Action<double>? onProgress = null, CancellationToken cancellationToken = default)
+    public async Task CreateBackupAsync(GameEntity game, IReadOnlyList<GamePathEntry> paths, Action<double>? onProgress = null, CancellationToken cancellationToken = default)
     {
         DateTime now = DateTime.UtcNow;
         string fileName = string.Format(DomainConstants.LocalDataGameBackupFileNameFormat, now.ToString("dd-MM-yyyy_HH-mm-ss"));
         string fullBackupLocation = GetGameBackupFileName(game.Id, fileName);
 
-        if (!Directory.Exists(path))
+        if (!paths.Any(x => x.Enabled && Directory.Exists(x.Path)))
         {
-            _logger.LogInformation("Location {path} didn't exist, skipping backup for game {gameId}", path, game.Id);
+            _logger.LogInformation("No local locations existed, skipping backup for game {gameId}", game.Id);
             return;
         }
 
         //create the zip backup content
-        ZipHelper.CreateZipFromFolder(path, fullBackupLocation, onProgress);
+        ZipHelper.CreateCombinedZip(paths, fullBackupLocation, onProgress);
         await AddBackupToManifestAsync(game, fileName, now, cancellationToken);
     }
 
-    public async Task RestoreBackupAsync(string gameId, string backupId, string outputDirectory, CancellationToken cancellationToken = default)
+    public async Task RestoreBackupAsync(string gameId, string backupId, IReadOnlyList<GamePathEntry> paths, CancellationToken cancellationToken = default)
     {
         List<LocalGameBackupManifestEntity>? manifests = await GetBackupManifestAsync(gameId, cancellationToken);
         LocalGameBackupManifestEntity? manifest = manifests?.FirstOrDefault(x => x.Id == backupId);
@@ -57,7 +58,7 @@ public class LocalGameSaveBackupService(
         }
 
         using var fileStream = new FileStream(fullBackupLocation, FileMode.Open, FileAccess.Read);
-        ZipHelper.ExtractToDirectory(fileStream, outputDirectory, DateTime.UtcNow);
+        ZipHelper.ExtractCombinedZip(fileStream, paths, DateTime.UtcNow);
     }
 
     public async Task DeleteBackupAsync(string gameId, string backupId, CancellationToken cancellationToken = default)

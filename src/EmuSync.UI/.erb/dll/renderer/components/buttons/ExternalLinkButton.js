@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = ExternalLinkButton;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const Pre_1 = require("@/renderer/components/Pre");
 const material_1 = require("@mui/material");
@@ -24,4 +23,5 @@ function ExternalLinkButton({ href, text }) {
                             fontSize: "0.75rem"
                         } })] }) }) });
 }
+exports.default = ExternalLinkButton;
 //# sourceMappingURL=ExternalLinkButton.js.map

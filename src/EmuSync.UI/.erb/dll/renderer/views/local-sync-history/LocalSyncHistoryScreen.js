@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = LocalSyncHistoryScreen;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const game_api_1 = require("@/renderer/api/game-api");
@@ -31,4 +30,5 @@ function LocalSyncHistoryScreen() {
     }, [query.data, gamesQuery.data]);
     return (0, jsx_runtime_1.jsx)(AgentStatusHarness_1.default, { children: (0, jsx_runtime_1.jsx)(LocalSyncLogDataGrid_1.default, { loading: query.isLoading || gamesQuery.isLoading, hasError: query.isError, reloadFunc: query.refetch, games: gamesQuery.data ?? [], logs: logsWithValidGames, showToolbar: true, showGameColumn: true, disableSelection: false }) });
 }
+exports.default = LocalSyncHistoryScreen;
 //# sourceMappingURL=LocalSyncHistoryScreen.js.map

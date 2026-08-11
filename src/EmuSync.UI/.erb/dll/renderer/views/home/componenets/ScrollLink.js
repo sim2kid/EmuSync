@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = ScrollLink;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const Pre_1 = require("@/renderer/components/Pre");
 const material_1 = require("@mui/material");
@@ -15,4 +14,5 @@ function ScrollLink({ children, scrollRef }) {
             width: "auto"
         }, onClick: scrollTo, children: (0, jsx_runtime_1.jsx)(Pre_1.Pre, { children: children }) });
 }
+exports.default = ScrollLink;
 //# sourceMappingURL=ScrollLink.js.map

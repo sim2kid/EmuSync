@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = SyncSourceForm;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cache_keys_1 = require("@/renderer/api/cache-keys");
 const sync_source_api_1 = require("@/renderer/api/sync-source-api");
@@ -59,23 +58,23 @@ function SyncSourceForm() {
     const autoSyncFrequencyMins = watch("autoSyncFrequencyMins");
     const autoSyncFrequencyMinsHasChanged = autoSyncFrequencyMins != query.data?.autoSyncFrequencyMins;
     const maximumLocalGameBackups = watch("maximumLocalGameBackups");
-    console.log(maximumLocalGameBackups);
     return (0, jsx_runtime_1.jsx)("form", { onSubmit: handleSubmit(handleFormSubmit), children: (0, jsx_runtime_1.jsxs)(Section_1.default, { children: [(0, jsx_runtime_1.jsx)(SectionTitle_1.default, { title: "Device details", icon: (0, jsx_runtime_1.jsx)(Icon, {}), sectionIsDirty: formState.isDirty }), (0, jsx_runtime_1.jsxs)(LoadingHarness_1.default, { query: query, loadingState: (0, jsx_runtime_1.jsx)(LoadingState, {}), children: [(0, jsx_runtime_1.jsx)(react_hook_form_1.Controller, { name: "name", control: control, rules: {
                                 required: "Name is required"
-                            }, render: ({ field, fieldState }) => ((0, jsx_runtime_1.jsx)(DefaultTextField_1.default, { field: field, fieldState: fieldState, label: "Device name", disabled: disabled || isSubmitting })) }), (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { gap: 0.5, children: [(0, jsx_runtime_1.jsx)(react_hook_form_1.Controller, { name: "maximumLocalGameBackups", control: control, rules: {
+                            }, render: ({ field, fieldState }) => ((0, jsx_runtime_1.jsx)(DefaultTextField_1.default, { required: true, field: field, fieldState: fieldState, label: "Device name", disabled: disabled || isSubmitting })) }), (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { gap: 0.5, children: [(0, jsx_runtime_1.jsx)(react_hook_form_1.Controller, { name: "maximumLocalGameBackups", control: control, rules: {
                                         required: "This field is required",
                                         min: { value: 0, message: "Must be greater than -1" },
                                         validate: (v) => Number.isInteger(Number(v)) || "Must be a whole number"
-                                    }, render: ({ field, fieldState }) => ((0, jsx_runtime_1.jsx)(DefaultTextField_1.default, { field: field, fieldState: fieldState, label: "Maximum local game backups (per game)", type: "number", disabled: disabled || isSubmitting, placeholder: "The maximum amount of local backups kept per game" })) }), (maximumLocalGameBackups === 0 || maximumLocalGameBackups === "0") &&
+                                    }, render: ({ field, fieldState }) => ((0, jsx_runtime_1.jsx)(DefaultTextField_1.default, { required: true, field: field, fieldState: fieldState, label: "Maximum local game backups (per game)", type: "number", disabled: disabled || isSubmitting, placeholder: "The maximum amount of local backups kept per game" })) }), (maximumLocalGameBackups === 0 || maximumLocalGameBackups === "0") &&
                                     (0, jsx_runtime_1.jsx)(WarningAlert_1.default, { content: "Having this value set to 0 disables local backups." })] }), (0, jsx_runtime_1.jsxs)(VerticalStack_1.default, { gap: 0.5, children: [(0, jsx_runtime_1.jsx)(react_hook_form_1.Controller, { name: "autoSyncFrequencyMins", control: control, rules: {
                                         required: "This field is required",
                                         min: { value: 1, message: "Must be greater than 0" },
                                         validate: (v) => Number.isInteger(Number(v)) || "Must be a whole number"
-                                    }, render: ({ field, fieldState }) => ((0, jsx_runtime_1.jsx)(DefaultTextField_1.default, { field: field, fieldState: fieldState, label: "AutoSync frequency (in minutes)", type: "number", disabled: disabled || isSubmitting, placeholder: "How often EmuSync will check if files need to uploaded/downloaded" })) }), autoSyncFrequencyMinsHasChanged &&
+                                    }, render: ({ field, fieldState }) => ((0, jsx_runtime_1.jsx)(DefaultTextField_1.default, { required: true, field: field, fieldState: fieldState, label: "AutoSync frequency (in minutes)", type: "number", disabled: disabled || isSubmitting, placeholder: "How often EmuSync will check if files need to uploaded/downloaded" })) }), autoSyncFrequencyMinsHasChanged &&
                                     (0, jsx_runtime_1.jsx)(InfoAlert_1.default, { content: "Changing the auto sync frequency will trigger AutoSync immediately" })] }), nextAutoSyncTimeQuery.data &&
                             (0, jsx_runtime_1.jsx)(material_1.Box, { sx: { px: 1 }, children: (0, jsx_runtime_1.jsx)(CountdownTimer_1.default, { seconds: nextAutoSyncTimeQuery.data.secondsLeft, reset: nextAutoSyncTimeQuery.refetch }) }), (0, jsx_runtime_1.jsx)(material_1.Box, { children: (0, jsx_runtime_1.jsx)(material_1.Button, { color: "primary", variant: "contained", disabled: disabled || isSubmitting || !formState.isDirty, loading: isSubmitting, type: "submit", children: "Save changes" }) }), (query.data?.platformId && query.data.platformId > 0) &&
                             (0, jsx_runtime_1.jsx)(DisplayPlatform_1.default, { osPlatform: query.data.platformId })] })] }) });
 }
+exports.default = SyncSourceForm;
 function LoadingState() {
     return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(TextFieldSkeleton_1.default, {}), (0, jsx_runtime_1.jsx)(TextFieldSkeleton_1.default, {}), (0, jsx_runtime_1.jsx)(SaveButtonSkeleton_1.default, {}), (0, jsx_runtime_1.jsx)(TextFieldSkeleton_1.default, {})] });
 }

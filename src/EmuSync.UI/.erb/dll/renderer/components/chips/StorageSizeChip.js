@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = StorageChip;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 const Storage_1 = __importDefault(require("@mui/icons-material/Storage"));
@@ -22,4 +21,5 @@ function StorageChip({ bytes, size, sx }) {
     }, [bytes]);
     return (0, jsx_runtime_1.jsx)(material_1.Chip, { icon: (0, jsx_runtime_1.jsx)(Storage_1.default, {}), label: storageSize, size: size ?? "small", title: `The size of all files is ${storageSize}`, sx: sx });
 }
+exports.default = StorageChip;
 //# sourceMappingURL=StorageSizeChip.js.map

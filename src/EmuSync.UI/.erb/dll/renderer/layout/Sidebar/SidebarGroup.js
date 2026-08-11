@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = SidebarGroup;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const material_1 = require("@mui/material");
 const NavItem_1 = __importDefault(require("@/renderer/layout/Sidebar/NavItem"));
@@ -64,4 +63,5 @@ function SidebarGroup({ header, links, showText, onLinkClick }) {
             return (0, jsx_runtime_1.jsx)(NavItem_1.default, { href: link.href, linkText: link.linkText, showText: showText, icon: (0, jsx_runtime_1.jsx)(link.icon, {}), onClick: onLinkClick, selected: selected }, `nav-item-${linkIndex}`);
         }) });
 }
+exports.default = SidebarGroup;
 //# sourceMappingURL=SidebarGroup.js.map
